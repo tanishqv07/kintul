@@ -17,5 +17,8 @@ const bookingRoutes = require("./routes/bookingRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 
+app.get("/", (req, res) => {
+    res.send("Backend is working!");
+  });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
