@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, unique: true, sparse: true }, 
   password: String,
   profileImage: String, 
-  adhaarCardImage: String,
+  adhaarCardImage:String,
   profession: String, 
   role: { type: String, enum: ["Admin", "Provider", "Customer"], required: true }
 });
