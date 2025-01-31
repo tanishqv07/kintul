@@ -18,8 +18,11 @@ exports.register = async (req, res) => {
   const { name, number, password, role, address, email, profileImage, adhaarCardImage, profession } = req.body;
   try{
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ name, number, password: hashedPassword, role, address, email, profileImage, adhaarCardImage, profession });
+  const profileImage = req.files?.profileImage ? req.files.profileImage[0].path : null;
+  const adhaarCardImage = req.files?.adhaarCardImage ? req.files.adhaarCardImage[0].path : null;
 
+  const user = new User({ name, number, password: hashedPassword, role, address, email, profileImage, adhaarCardImage, profession });
+  
   await user.save();
   
   res.json({ message: "User registered successfully" });
