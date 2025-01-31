@@ -16,10 +16,16 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   const { name, number, password, role, address, email, profileImage, adhaarCardImage, profession } = req.body;
-
+  try{
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ name, number, password: hashedPassword, role, address, email, profileImage, adhaarCardImage, profession });
 
   await user.save();
+  
   res.json({ message: "User registered successfully" });
+  }
+  catch (e){
+    console.log("error: ",e)
+    return res.json({"error": e})
+  }
 };
