@@ -8,6 +8,7 @@ const mongoose = require("./config/db");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors()); //cross orienting requests
 
 //routes
@@ -16,6 +17,11 @@ const bookingRoutes = require("./routes/bookingRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
+//debug
+app.use((req, res, next) => {
+    console.log(`Incoming Request: ${req.method} ${req.url}`);
+    next();
+  });
 
 app.get("/", (req, res) => {
     res.send("Backend is working!");
