@@ -7,6 +7,7 @@ const mongoose = require("./config/db");
 
 
 const app = express();
+app.enable("trust proxy");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); //cross orienting requests
