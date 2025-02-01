@@ -57,7 +57,7 @@ const Signup = () => {
         <option value="Provider">Provider</option>
       </select>
 
-      {/* ✅ Show Email only for Customers */}
+      {/*  Show Email only for Customers */}
       {formData.role === "Customer" && (
         <input type="email" name="email" placeholder="Email" onChange={handleChange} className="border p-2 mt-2" />
       )}
@@ -65,7 +65,7 @@ const Signup = () => {
       <label className="mt-2">Profile Image:</label>
       <input type="file" name="profileImage" onChange={handleChange} className="border p-2 mt-2" />
 
-      {/* ✅ Show Aadhaar Card upload only for Providers */}
+      {/* Show Aadhaar Card upload only for Providers */}
       {formData.role === "Provider" && (
         <>
           <label className="mt-2">Aadhaar Card Image:</label>

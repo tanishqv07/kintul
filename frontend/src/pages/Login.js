@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const [number, setNumber] = useState("");
@@ -40,6 +40,14 @@ const Login = () => {
       <button onClick={handleLogin} className="px-6 py-2 bg-blue-600 text-white mt-4">
         Login
       </button>
+
+      {/* ✅ Admin Login Link */}
+      <p className="mt-4 text-gray-600">
+        Are you an admin?{" "}
+        <Link to="/admin" className="text-blue-600 underline">
+          Click here to login
+        </Link>
+      </p>
     </div>
   );
 };
