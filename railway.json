@@ -1,0 +1,6 @@
+{
+    "Build":{
+        "base": "backend",
+        "cmd": "npm install && npm start"
+    }
+}
