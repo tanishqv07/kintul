@@ -26,8 +26,8 @@ const Signup = () => {
   const handleSignup = async () => {
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
-      if (key === "adhaarCardImage" && formData.role === "Customer") return; // ✅ Don't send Aadhaar if Customer
-      if (key === "email" && formData.role === "Provider") return; // ✅ Don't send Email if Provider
+      if (key === "adhaarCardImage" && formData.role === "Customer") return;
+      if (key === "email" && formData.role === "Provider") return; 
       formDataToSend.append(key, formData[key]);
     });
 

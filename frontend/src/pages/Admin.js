@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import AdminNavbar from "../components/adminNavbar"; //  Import Admin Navbar
+import AdminNavbar from "../components/AdminNavbar"; //  Import Admin Navbar
 
 const Admin = () => {
   const [passkey, setPasskey] = useState("");

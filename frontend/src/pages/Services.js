@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 
 const Services = () => {
   const [services, setServices] = useState([]);
-
+  const [isNavbarBottom,setIsNavbarBottom] = useState('false')
   useEffect(() => {
     const fetchServices = async () => {
       const response = await fetch("https://kintul-production.up.railway.app/api/services");
@@ -15,9 +15,9 @@ const Services = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-    
-      <h2 className="text-3xl font-bold text-center mb-6">Available Services</h2>
+    <div className={`min-h-screen bg-gray-100 p-0`}>
+      <Navbar setIsNavbarBottom={setIsNavbarBottom} />
+      <h2 className={`text-3xl font-bold text-center mb-6 py-3 ${isNavbarBottom ? "mt-0 py-5":"mt-20 py-5"} `}>Available Services</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {services.map((service) => (
           <div key={service._id} className="bg-white shadow-md p-4 rounded-lg">
@@ -29,7 +29,8 @@ const Services = () => {
           </div>
         ))}
       </div>
-      <Navbar className="absolute bottom-0"/>
+
+    
     </div>
   );
 };

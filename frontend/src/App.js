@@ -5,9 +5,9 @@ import Login from "./pages/Login.js";
 import Signup from "./pages/Signup";
 import Services from "./pages/Services";
 import Admin from "./pages/Admin";
-//import Bookings from "./pages/Bookings";
-//import Profile from "./pages/Profile";
-//import Search from "./pages/Search";
+import Bookings from "./pages/Bookings";
+import Profile from "./pages/Profile";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -18,10 +18,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/services" element={<Services />} />
-        {/*
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/search" element={<Search />} />*/}
+        <Route path="/search" element={<Search />} />*/
       </Routes>
     </Router>
   );
