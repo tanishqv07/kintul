@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -12,8 +12,21 @@ const Signup = () => {
     profileImage: null,
     adhaarCardImage: null, // Aadhaar card for Provider only
   });
-
+  const [services,setServices] useState([]);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    const fetchServices = async () =>{
+      try{
+        const response = await fetch("https://kintul-production.up.railway.app/api/services")
+        const data = await response.json();
+        setServices(data)
+      }catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServices();
+  })
 
   const handleChange = (e) => {
     if (e.target.type === "file") {
@@ -65,6 +78,16 @@ const Signup = () => {
       <label className="mt-2">Profile Image:</label>
       <input type="file" name="profileImage" onChange={handleChange} className="border p-2 mt-2" />
 
+      {formData.role == "Provider" && (
+        <select name="profession" onChange={handleChange} className="border p-2 mt-2">
+          <option value="">select profession</option>
+          {services.map((service)=>(
+            <option key={service._id} value={service.title}>
+              {service.title}
+            </option>
+          ))}
+        </select>
+      )}
       {/* Show Aadhaar Card upload only for Providers */}
       {formData.role === "Provider" && (
         <>
@@ -72,7 +95,7 @@ const Signup = () => {
           <input type="file" name="adhaarCardImage" onChange={handleChange} className="border p-2 mt-2" />
         </>
       )}
-
+     
       <button onClick={handleSignup} className="px-6 py-2 bg-green-600 text-white mt-4">
         Sign Up
       </button>
