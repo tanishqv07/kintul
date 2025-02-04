@@ -18,6 +18,7 @@ const bookingRoutes = require("./routes/bookingRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/services",serviceRoutes);
 //debug
 app.use((req, res, next) => {
     console.log(`Incoming Request: ${req.method} ${req.url}`);

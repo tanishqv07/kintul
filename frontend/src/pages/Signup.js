@@ -12,7 +12,7 @@ const Signup = () => {
     profileImage: null,
     adhaarCardImage: null, // Aadhaar card for Provider only
   });
-  const [services,setServices] useState([]);
+  const [services,setServices] =useState([]);
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -78,7 +78,7 @@ const Signup = () => {
       <label className="mt-2">Profile Image:</label>
       <input type="file" name="profileImage" onChange={handleChange} className="border p-2 mt-2" />
 
-      {formData.role == "Provider" && (
+      {formData.role === "Provider" && (
         <select name="profession" onChange={handleChange} className="border p-2 mt-2">
           <option value="">select profession</option>
           {services.map((service)=>(
