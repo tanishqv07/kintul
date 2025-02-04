@@ -4,15 +4,26 @@ import Navbar from "../components/Navbar";
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [newAddress, setNewAddress] = useState("");
-  const [isNavbarBottom,setIsNavbarBottom] = useState('false')
+  const [isNavbarBottom,setIsNavbarBottom] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await fetch("https://kintul-production.up.railway.app/api/user/profile");
+      const token =localStorage.getItem("token")
+        if (!token){ 
+            alert("you need to log-in")
+            return
+        }
+      const response = await fetch("https://kintul-production.up.railway.app/api/user/profile",{
+        headers:{
+            Authorization: `Bearer${token}`,
+        },
+      });
+      if (response.ok){
       const data = await response.json();
       setUser(data);
       setNewAddress(data.address);
     };
+};
 
     fetchUser();
   }, []);
@@ -30,7 +41,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-0">
-      <h2 className="text-3xl font-bold text-center mb-6">My Profile</h2>
+      <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom}`}>My Profile</h2>
       {user ? (
         <div className="bg-white p-4 shadow-md rounded-lg text-center">
           <img src={user.profileImage} alt="Profile" className="w-24 h-24 rounded-full mx-auto mb-4" />

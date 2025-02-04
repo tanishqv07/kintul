@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
-  const [isNavbarBottom,setIsNavbarBottom] = useState('false')
+  const [isNavbarBottom,setIsNavbarBottom] = useState(false);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -26,7 +26,7 @@ const Bookings = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-0">
-      <h2 className="text-3xl font-bold text-center mb-6">My Bookings</h2>
+      <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom}`}>My Bookings</h2>
       {bookings.length === 0 ? (
         <p className="text-center">No bookings found.</p>
       ) : (
