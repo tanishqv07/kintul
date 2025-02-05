@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
 import AdminNavbar from "../components/AdminNavbar"; //  Import Admin Navbar
-
+import { FaCirclePlus, FaMinus} from "react-icons/fa6";
 const Admin = () => {
   const [passkey, setPasskey] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedTab, setSelectedTab] = useState("users"); // Default tab
   const [providers, setProviders] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [newService, setNewService] = useState("");
   const [greetings, setGreetings] = useState("");
+  const [services, setServices] = useState([]);
+  const [newService, setNewService] = useState({
+    title:"",
+    description:"",
+    image:null,
+  });
+useEffect(()=>{
+  if(isAuthenticated){
+    fetchServices();
+  }
+},[isAuthenticated])
 
+  
   useEffect(()=>{
     setGreetings(getGreetings())
   },[])
@@ -68,26 +79,66 @@ const Admin = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      fetchBookings(); // Refresh bookings list
+      fetchBookings(); 
     } catch (error) {
       console.error("Error updating booking:", error);
     }
   };
+// fetch a list of existing services
+const fetchServices = async () => {
+  try {
+      const response = await fetch("https://kintul-production.up.railway.app/api/services");
+      if (!response.ok) throw new Error("Failed to fetch services");
 
+      const data = await response.json();
+      setServices(data);
+  } catch (error) {
+      console.error("Error fetching services:", error);
+  }
+};
   const handleAddService = async () => {
-    if (!newService.trim()) return;
+      if (!newService.title || !newService.description || !newService.image) {
+        alert("Please fill all fields including an image.");
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append("title", newService.title);
+      formData.append("description", newService.description);
+      formData.append("image", newService.image);
+  
+      try {
+        const response = await fetch("https://kintul-production.up.railway.app/api/services", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (response.ok) {
+          alert("Service added successfully!");
+          setNewService({ title: "", description: "", image: null });
+        } else {
+          alert("Failed to add service.");
+        }
+      } catch (error) {
+        console.error("Error adding service:", error);
+      }
+    };
+  //deletion
+  const deleteService = async (id) => {
     try {
-      await fetch("https://kintul-production.up.railway.app/api/services", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newService }),
-      });
-      setNewService("");
-      alert("Service added successfully!");
+        const response = await fetch(`https://kintul-production.up.railway.app/api/services/${id}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) throw new Error("Failed to delete service");
+
+        alert("Service deleted successfully!");
+        fetchServices();
     } catch (error) {
-      console.error("Error adding service:", error);
+        console.error("Error deleting service:", error);
     }
-  };
+};
+
 
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
@@ -166,13 +217,38 @@ const Admin = () => {
                 <input
                   type="text"
                   placeholder="Service Name"
-                  value={newService}
-                  onChange={(e) => setNewService(e.target.value)}
-                  className="border p-2 mt-2"
+                  value={newService.title}
+                  onChange={(e) => setNewService({ ...newService, title: e.target.value })}
+                  className="border p-2 mt-2 w-full"
                 />
+                <input
+                  type="text"
+                  placeholder="Description"
+                  value={newService.description}
+                  onChange={(e) => setNewService({ ...newService, description: e.target.value })}
+                  className="border p-2 mt-2 w-full"
+                />
+                <input
+                  type="file"
+                  onChange={(e) => setNewService({ ...newService, image: e.target.files[0] })}
+                  className="border p-2 mt-2 w-full"
+    />
                 <button onClick={handleAddService} className="px-6 py-2 bg-green-600 text-white mt-2">
-                  Add Service
+                  <FaCirclePlus/>
                 </button>
+                {/**List of services available on plateform */}
+                <h3>Existing services</h3>
+                <ul className="mt-2">
+                  {services.map((service)=>(
+                    <li key={service._id} className="border-b py-2 flex justify-between">
+                      {service.title}
+                      <button onClick={deleteService(service._id)}
+                      className="text-red-600 hover:text-red-800">
+                        <FaMinus/>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>

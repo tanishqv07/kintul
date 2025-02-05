@@ -15,14 +15,14 @@ const Profile = () => {
         }
       const response = await fetch("https://kintul-production.up.railway.app/api/user/profile",{
         headers:{
-            Authorization: `Bearer${token}`,
+            Authorization: `Bearer ${token}`,
         },
       });
       if (!response.ok){
-      console.log(response)
+      console.log(response,"error in response")
     };
       const data = await response.json();
-      console.log(data)
+      console.log(data.token)
       setUser(data);
       setNewAddress(data.address);
 };    
