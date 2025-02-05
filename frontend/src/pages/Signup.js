@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -13,6 +14,7 @@ const Signup = () => {
     adhaarCardImage: null, // Aadhaar card for Provider only
   });
   const [services,setServices] =useState([]);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -59,10 +61,18 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h2 className="text-2xl font-bold">Sign Up</h2>
+      <div className="flex flex-col bg-white p-4 shadow-md">
+      <h2 className="text-2xl font-bold flex justify-center">Sign Up</h2>
       <input type="text" name="name" placeholder="Name" onChange={handleChange} className="border p-2 mt-2" />
       <input type="text" name="number" placeholder="Phone Number" onChange={handleChange} className="border p-2 mt-2" />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} className="border p-2 mt-2" />
+      <div className="relative w-full">
+      <input type={showPassword? "text":"password"}
+       name="password" placeholder="Password" onChange={handleChange} className="border p-2 mt-2" />
+      <button
+        type="button"
+        className="absolute inset-y-0 right-3 flex items-center"
+        onClick={()=>setShowPassword(!showPassword)}>{showPassword?<FaEye/>:<FaEyeSlash/>}</button>
+      </div>
       <input type="text" name="address" placeholder="Address" onChange={handleChange} className="border p-2 mt-2" />
 
       <select name="role" onChange={handleChange} className="border p-2 mt-2">
@@ -99,6 +109,7 @@ const Signup = () => {
       <button onClick={handleSignup} className="px-6 py-2 bg-green-600 text-white mt-4">
         Sign Up
       </button>
+    </div>
     </div>
   );
 };

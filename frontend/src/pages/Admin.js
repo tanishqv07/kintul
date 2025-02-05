@@ -233,7 +233,7 @@ const fetchServices = async () => {
                   onChange={(e) => setNewService({ ...newService, image: e.target.files[0] })}
                   className="border p-2 mt-2 w-full"
     />
-                <button onClick={handleAddService} className="px-6 py-2 bg-green-600 text-white mt-2">
+                <button onClick={handleAddService} className="px-6 py-2 bg-green-600 text-white mt-2 rounded-full">
                   <FaCirclePlus/>
                 </button>
                 {/**List of services available on plateform */}
@@ -242,7 +242,7 @@ const fetchServices = async () => {
                   {services.map((service)=>(
                     <li key={service._id} className="border-b py-2 flex justify-between">
                       {service.title}
-                      <button onClick={deleteService(service._id)}
+                      <button onClick={()=>deleteService(service._id)}
                       className="text-red-600 hover:text-red-800">
                         <FaMinus/>
                       </button>
