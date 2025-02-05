@@ -18,12 +18,14 @@ const Profile = () => {
             Authorization: `Bearer${token}`,
         },
       });
-      if (response.ok){
+      if (!response.ok){
+      console.log(response)
+    };
       const data = await response.json();
+      console.log(data)
       setUser(data);
       setNewAddress(data.address);
-    };
-};
+};    
 
     fetchUser();
   }, []);
