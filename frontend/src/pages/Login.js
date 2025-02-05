@@ -23,7 +23,6 @@ const Login = () => {
     navigate("/services")
   }catch(e){
     console.log(e)
-    return res.status(500).json({error:"failed to connect to the server"})
   }
   };
 
