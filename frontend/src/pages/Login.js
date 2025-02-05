@@ -7,18 +7,26 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    try{
     const response = await fetch("https://kintul-production.up.railway.app/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ number, password }),
     });
 
-    if (response.ok) {
-      navigate("/services");
-    } else {
+    if (!response.ok) {
       alert("Invalid credentials!");
-    }
+      return
+    } 
+    const data = await response.json();
+    localStorage.setItem("token", data.token)
+    navigate("/services")
+  }catch(e){
+    console.log(e)
+    return res.status(500).json({error:"failed to connect to the server"})
+  }
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -41,7 +49,7 @@ const Login = () => {
         Login
       </button>
 
-      {/* ✅ Admin Login Link */}
+      {/* Admin Login Link */}
       <p className="mt-4 text-gray-600">
         Are you an admin?{" "}
         <Link to="/admin" className="text-blue-600 underline">

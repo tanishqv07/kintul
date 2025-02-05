@@ -3,17 +3,27 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.login = async (req, res) => {
-  const { number, password } = req.body;
+  try {
+    const { number, password } = req.body;
   const user = await User.findOne({ number });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  if (!user) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
 
-  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  //validating credentials
+  const isMatch = await bcrypt.compare(password,user.password)
+if (!isMatch){
+  return res.status(404).json({message:"invalid credentials"});
+}
+ const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "2h" });
   res.json({ token, user });
-};
-
+  }
+   catch (error) {
+    console.log(error)
+    return res.status(500).json({message:"server error login not possible"})
+  }
+}
 exports.register = async (req, res) => {
   const { name, number, password, role, address, email, profileImage, adhaarCardImage, profession } = req.body;
   try{
