@@ -21,7 +21,12 @@ const Login = () => {
     } 
     const data = await response.json();
     localStorage.setItem("token", data.token)
-    navigate("/services")
+    localStorage.setItem("role",data.role);
+    if (data.role === "Provider"){
+      navigate("/providerDashboard")
+    }
+    else{
+    navigate("/services")}
   }catch(e){
     console.log(e)
   }
