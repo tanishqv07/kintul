@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import Bookings from "./pages/Bookings";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
+import ProviderDashboard from "./pages/ProviderDashboard.js";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/search" element={<Search />} />*/
+        <Route path="/search" element={<Search />} />
+        <Route path="/providerDashboard" element={<ProviderDashboard/>} />
       </Routes>
     </Router>
   );

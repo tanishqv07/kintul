@@ -17,7 +17,7 @@ if (!isMatch){
   return res.status(404).json({message:"invalid credentials"});
 }
  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "2h" });
-  res.json({ token, user });
+  res.json({ message:"login successfully", token, user, role: user.role });
   }
    catch (error) {
     console.log(error)

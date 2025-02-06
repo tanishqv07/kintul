@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Services = () => {
   const [services, setServices] = useState([]);
+  const navigate = useNavigate()
   const [isNavbarBottom,setIsNavbarBottom] = useState('false')
   useEffect(() => {
+    const role = localStorage.getItem("role")
+    console.log("role: ",role)
+    if (role === "Provider"){
+      navigate("/providerDashboard")
+      return
+    }
     const fetchServices = async () => {
       const response = await fetch("https://kintul-production.up.railway.app/api/services");
       const data = await response.json();
@@ -12,7 +20,7 @@ const Services = () => {
     };
 
     fetchServices();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className={`min-h-screen bg-gray-100 p-0`}>
