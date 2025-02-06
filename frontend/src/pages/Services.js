@@ -21,7 +21,34 @@ const Services = () => {
 
     fetchServices();
   }, [navigate]);
+const handleBookings = async (serviceId,serviceTitle) =>{
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("You need to log in to book a service");
+    return;
+  }
 
+  try {
+    const response = await fetch("https://kintul-production.up.railway.app/api/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        serviceId,
+        serviceName: serviceTitle, // ✅ Pass service title
+      }),
+    });
+
+    if (!response.ok) throw new Error("Booking failed");
+
+    alert("Booking confirmed!");
+    navigate("/confirm-booking")
+  } catch (error) {
+    console.error("Error creating booking:", error);
+  }
+}
   return (
     <div className={`min-h-screen bg-gray-100 p-0`}>
       <Navbar setIsNavbarBottom={setIsNavbarBottom} />
@@ -32,7 +59,8 @@ const Services = () => {
             <img src={service.imageUrl} alt={service.title} className="w-full h-40 object-cover rounded-md" />
             <h3 className="text-lg font-semibold mt-2">{service.title}</h3>
             <p className="text-gray-600">{service.description}</p>
-            <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md">Book Now</button>
+            <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+            onClick={()=>handleBookings(service._id,service.title)}>Book Now</button>
             
           </div>
         ))}

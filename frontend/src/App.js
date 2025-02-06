@@ -9,6 +9,7 @@ import Bookings from "./pages/Bookings";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import ProviderDashboard from "./pages/ProviderDashboard.js";
+import ConfirmBooking from "./pages/ConfirmBooking";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/confirm-booking" element={<ConfirmBooking />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<Search />} />

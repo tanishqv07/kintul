@@ -1,55 +1,59 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
-  const [isNavbarBottom,setIsNavbarBottom] = useState(false);
+  const [isNavbarBottom, setIsNavbarBottom] = useState(false);
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      const response = await fetch("https://kintul-production.up.railway.app/api/bookings");
-      const data = await response.json();
-      setBookings(data);
-    };
-
-    fetchBookings();
+    fetchUserBookings();
   }, []);
 
-  const handleCancel = async (id) => {
-    await fetch(`https://kintul-production.up.railway.app/api/bookings/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "cancelled" }),
-    });
-    setBookings(bookings.map(b => b._id === id ? { ...b, status: "cancelled" } : b));
+  const fetchUserBookings = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You need to log in");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://kintul-production.up.railway.app/api/bookings/my", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch bookings");
+
+      const data = await response.json();
+      setBookings(data);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-0">
-      <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom}`}>My Bookings</h2>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <Navbar setIsNavbarBottom={setIsNavbarBottom} />
+      <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom ? "mt-0" : "mt-20"}`}>
+        My Bookings
+      </h2>
+
       {bookings.length === 0 ? (
-        <p className="text-center">No bookings found.</p>
+        <p className="text-center text-gray-500">No bookings found.</p>
       ) : (
-        <ul className="space-y-4">
+        <ul className="bg-white shadow-md p-4 rounded-lg">
           {bookings.map((booking) => (
-            <li key={booking._id} className="p-4 bg-white shadow-md rounded-lg flex justify-between items-center">
+            <li key={booking._id} className="border-b p-2 flex justify-between">
               <div>
-                <strong>{booking.serviceName}</strong> - {booking.status}
+                <strong>{booking.serviceName}</strong> - {booking.customerAddress}
                 <br />
-                {booking.status === "pending" && (
-                  <button
-                    onClick={() => handleCancel(booking._id)}
-                    className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md"
-                  >
-                    Cancel Booking
-                  </button>
-                )}
+                <span>Status: {booking.status}</span>
               </div>
             </li>
           ))}
         </ul>
       )}
-      <Navbar setIsNavbarBottom={setIsNavbarBottom}/>
     </div>
   );
 };
