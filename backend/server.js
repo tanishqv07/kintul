@@ -8,7 +8,10 @@ const app = express();
 app.enable("trust proxy");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
+app.use(cors({
+  origin: ["http://localhost:3000", "https://your-deployed-frontend.com"],
+  credentials: true,
+})); 
 
 app.use((req, res, next) => {
   console.log(`Incoming Request: ${req.method} ${req.url}`);
@@ -25,6 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/provider", userRoutes);
 
 // Root Route
 app.get("/", (req, res) => {
