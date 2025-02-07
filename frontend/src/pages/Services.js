@@ -21,6 +21,7 @@ const Services = () => {
 
     fetchServices();
   }, [navigate]);
+
 const handleBookings = async (serviceId,serviceTitle) =>{
   const token = localStorage.getItem("token");
   if (!token) {
@@ -37,7 +38,7 @@ const handleBookings = async (serviceId,serviceTitle) =>{
       },
       body: JSON.stringify({
         serviceId,
-        serviceName: serviceTitle, // ✅ Pass service title
+        serviceName: serviceTitle, 
       }),
     });
 

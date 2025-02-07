@@ -41,3 +41,13 @@ exports.updateProfile = async (req, res) => {
     }
   };
   
+exports.getAllProviders = async (req,res) =>{
+  try {
+    const providers = await User.find({role:"Provider"}).select("-password");
+    res.json(providers);
+  } catch (error) {
+    console.error("error",error)
+    res.status(500).json({message:"cannot fetch service providers"})
+  }
+};
+
