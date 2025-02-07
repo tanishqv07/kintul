@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminNavbar from "../components/AdminNavbar"; //  Import Admin Navbar
 import { FaCirclePlus, FaMinus} from "react-icons/fa6";
+import jsPDF from 'jspdf';
 const Admin = () => {
   const [passkey, setPasskey] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,7 +67,36 @@ useEffect(()=>{
       console.error("Error fetching providers:", error);
     }
   };
+
+//toggle status of the providers
+const handleToggleProviderStatus = async (id, currentStatus) => {
+  try {
+    const newStatus = currentStatus === "active" ? "inactive" : "active";
+    await fetch(`https://kintul-production.up.railway.app/api/user/providers/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    });
+
+    setProviders(providers.map(p => p._id === id ? { ...p, status: newStatus } : p));
+  } catch (error) {
+    console.error("Error updating provider status:", error);
+  }
+};
+
+//downloadable pdf generator
+const handleDownloadPDF = (provider) =>{
+  const doc = new jsPDF();
+  doc.text("Provider Details",20,20);
+  doc.text(`Name: ${provider.name}`,20,30);
+  doc.text(`Address: ${provider.address}`,20,40);
+  doc.text(`Contact Number: ${provider.number}`,20,50);
   
+  if (provider.aadharCardImage){
+    doc.addImage(provider.aadharCardImage,"JPEG",20,60,50,60)
+  }
+  doc.save(`${provider.name}_profile.pdf`);
+}
 
   const fetchBookings = async () => {
     try {
@@ -174,12 +204,37 @@ const fetchServices = async () => {
               <div className="p-4 bg-white shadow-md rounded-lg">
                 <h3 className="text-xl font-semibold">Registered Providers</h3>
                 <ul>
-                  {providers.map((provider) => (
-                    <li key={provider._id} className="border-b p-2">
-                      {provider.name} ({provider.profession}) - {provider.number}
-                    </li>
-                  ))}
-                </ul>
+  {providers.map((provider) => (
+    <li key={provider._id} className="border-b p-2 flex justify-between">
+      <div>
+        {provider.name} ({provider.profession}) - {provider.number}
+        <br />
+        <span className={`font-bold ${provider.status === "active" ? "text-green-600" : "text-red-600"}`}>
+          {provider.status}
+        </span>
+      </div>
+      <div className="flex gap-2">
+        {/*  Toggle Status Button */}
+        <button
+          onClick={() => handleToggleProviderStatus(provider._id, provider.status)}
+          className={`px-4 py-1 rounded-md ${
+            provider.status === "active" ? "bg-red-500 text-white" : "bg-green-500 text-white"
+          }`}
+        >
+          {provider.status === "active" ? "Disable" : "Enable"}
+        </button>
+
+        {/*  Download PDF Button */}
+        <button
+          onClick={() => handleDownloadPDF(provider)}
+          className="px-4 py-1 bg-blue-500 text-white rounded-md"
+        >
+          Download PDF
+        </button>
+      </div>
+    </li>
+  ))}
+</ul>
               </div>
             )}
 
