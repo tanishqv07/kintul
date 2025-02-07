@@ -41,13 +41,18 @@ exports.updateProfile = async (req, res) => {
     }
   };
   
-exports.getAllProviders = async (req,res) =>{
-  try {
-    const providers = await User.find({role:"Provider"}).select("-password");
-    res.json(providers);
-  } catch (error) {
-    console.error("error",error)
-    res.status(500).json({message:"cannot fetch service providers"})
-  }
-};
+  exports.getAllProviders = async (req, res) => {
+    try {
+      const providers = await User.find({ role: "Provider" }).select("-password");
+      
+      if (!providers.length) {
+        return res.status(404).json({ message: "No providers found." });
+      }
+      
+      res.json(providers);
+    } catch (error) {
+      console.error("Error fetching providers:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
 

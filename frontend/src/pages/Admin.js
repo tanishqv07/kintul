@@ -54,14 +54,19 @@ useEffect(()=>{
 
   const fetchProviders = async () => {
     try {
-      const res = await fetch("https://kintul-production.up.railway.app/api/providers");
-      if (!res.ok) throw new Error("Failed to fetch provider") 
+      const res = await fetch("https://kintul-production.up.railway.app/api/user/providers")
+  
+      if (!res.ok) {
+        throw new Error(`Failed to fetch providers. Status: ${res.status}`);
+      }
+  
       const data = await res.json();
       setProviders(data);
     } catch (error) {
       console.error("Error fetching providers:", error);
     }
   };
+  
 
   const fetchBookings = async () => {
     try {

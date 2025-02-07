@@ -28,7 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/provider", userRoutes);
+
 
 // Root Route
 app.get("/", (req, res) => {
