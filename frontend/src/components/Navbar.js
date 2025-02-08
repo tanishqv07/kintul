@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaUser, FaBookmark, FaMagnifyingGlass, FaUsers } from "react-icons/fa6";
 
-const Navbar = ({setIsNavbarBottom}) => {
+const Navbar = ({ setIsNavbarBottom }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [hoverStyle, setHoverStyle] = useState({ left: "0vw", width: "25vw" });
+  const location = useLocation(); // Detect current route
 
   useEffect(() => {
     const handleResize = () => {
       const mobileView = window.innerWidth < 768;
-      setIsMobile(mobileView)
-      setIsNavbarBottom(mobileView)
+      setIsMobile(mobileView);
+      setIsNavbarBottom(mobileView);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -41,31 +42,42 @@ const Navbar = ({setIsNavbarBottom}) => {
       {/* Navbar Links */}
       <Link
         to="/services"
-        className="relative flex flex-col items-center px-4 py-2 w-1/4 text-center"
+        className={`relative flex flex-col items-center px-4 py-2 w-1/4 text-center ${
+          location.pathname === "/services" ? "text-orange-500" : ""
+        }`}
         onMouseEnter={() => handleHover("0vw")}
       >
         <FaUsers size={22} />
         Services
       </Link>
+
       <Link
         to="/search"
-        className="relative flex flex-col items-center px-4 py-2 w-1/4 text-center"
+        className={`relative flex flex-col items-center px-4 py-2 w-1/4 text-center ${
+          location.pathname === "/search" ? "text-orange-500" : ""
+        }`}
         onMouseEnter={() => handleHover("25vw")}
       >
         <FaMagnifyingGlass size={22} />
         Search
       </Link>
+
       <Link
         to="/bookings"
-        className="relative flex flex-col items-center px-4 py-2 w-1/4 text-center"
+        className={`relative flex flex-col items-center px-4 py-2 w-1/4 text-center ${
+          location.pathname === "/bookings" ? "text-orange-500" : ""
+        }`}
         onMouseEnter={() => handleHover("50vw")}
       >
         <FaBookmark size={22} />
         Bookings
       </Link>
+
       <Link
         to="/profile"
-        className="relative flex flex-col items-center px-4 py-2 w-1/4 text-center"
+        className={`relative flex flex-col items-center px-4 py-2 w-1/4 text-center ${
+          location.pathname === "/profile" ? "text-orange-500" : ""
+        }`}
         onMouseEnter={() => handleHover("75vw")}
       >
         <FaUser size={22} />

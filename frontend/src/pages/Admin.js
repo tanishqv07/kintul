@@ -83,21 +83,39 @@ const handleToggleProviderStatus = async (id, currentStatus) => {
     console.error("Error updating provider status:", error);
   }
 };
+//convert ImageUrl to Image64
+const getBase64Image = async (ImageUrl) =>{
+  try{
+    const response = await fetch(ImageUrl);
+    const blob = await response.blob();
 
+    return new Promise((resolve)=>{
+      const reader = new FileReader();
+      reader.onloadend = ()=> resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  }catch (error) {
+    console.error("Error converting image:", error);
+    return null;
+}
+};
 //downloadable pdf generator
-const handleDownloadPDF = (provider) =>{
+const handleDownloadPDF = async (provider) =>{
   const doc = new jsPDF();
   doc.text("Provider Details",20,20);
   doc.text(`Name: ${provider.name}`,20,30);
   doc.text(`Address: ${provider.address}`,20,40);
   doc.text(`Contact Number: ${provider.number}`,20,50);
   
-  if (provider.aadharCardImage){
-    doc.addImage(provider.aadharCardImage,"JPEG",20,60,50,60)
-  }
-  doc.save(`${provider.name}_profile.pdf`);
-}
-
+  const base64Image = await getBase64Image(provider.aadharCardImage)
+ if(!base64Image){
+  doc.text("No image found contact provider",20,60);
+  console.log(provider.aadharCardImage)
+ }
+ console.log(provider.aadharCardImage)
+ doc.addImage(base64Image,"JPEG",20,60,50,60)
+doc.save(`${provider.name}_details.pdf`);
+};
   const fetchBookings = async () => {
     try {
       const response = await fetch("https://kintul-production.up.railway.app/api/bookings");
@@ -207,7 +225,7 @@ const fetchServices = async () => {
   {providers.map((provider) => (
     <li key={provider._id} className="border-b p-2 flex justify-between">
       <div>
-        {provider.name} ({provider.profession}) - {provider.number}
+        {provider.name} ({provider.profession}) - {provider.number} - {provider.address}
         <br />
         <span className={`font-bold ${provider.status === "active" ? "text-green-600" : "text-red-600"}`}>
           {provider.status}
