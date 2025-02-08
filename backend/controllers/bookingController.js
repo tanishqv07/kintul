@@ -28,7 +28,7 @@ exports.createBooking = async (req, res) => {
   }
 };
 
-// ✅ Update Booking Status
+// Update Booking Status
 exports.updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -51,7 +51,7 @@ exports.getAllBookings = async (req, res) => {
 };
 
 
-// ✅ Fetch user bookings based on phone number
+//  Fetch user bookings based on phone number
 exports.getUserBookings = async (req, res) => {
   try {
     console.log("Fetching bookings for:", req.user.number); // Debugging
