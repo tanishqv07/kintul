@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import TitleBar from "../components/TitleBar";
+import { FaRegClock } from "react-icons/fa6";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -42,7 +43,12 @@ const Bookings = () => {
       <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom ? "mt-0" : "mt-20"}`}>My Bookings</h2>
 
       {bookings.length === 0 ? (
+        <div className="flex flex-col text-orange-500">
+          <FaRegClock size={36}/>
         <p className="text-center text-lg text-gray-400">No bookings found.</p>
+        <button className="bg-orange-500 text-black"
+        onClick={()=>navigate("/service")}>book now</button>
+        </div>
       ) : (
         <ul className="bg-white shadow-md p-4 rounded-lg w-full max-w-2xl mt-4">
           {bookings.map((booking) => (

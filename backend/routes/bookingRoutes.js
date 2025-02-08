@@ -10,6 +10,9 @@ router.post("/", authMiddleware, roleMiddleware("Customer"), createBooking);
 // get individual bookings
 router.get("/my", authMiddleware, getUserBookings);
 
+//for admin fetch
+router.get("/all", getAllBookings);
+
 //toggle route
 router.put("/:id/status", authMiddleware, roleMiddleware("Admin"), updateBookingStatus);
 

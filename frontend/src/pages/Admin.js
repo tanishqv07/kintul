@@ -118,7 +118,7 @@ doc.save(`${provider.name}_details.pdf`);
 };
   const fetchBookings = async () => {
     try {
-      const response = await fetch("https://kintul-production.up.railway.app/api/bookings");
+      const response = await fetch("https://kintul-production.up.railway.app/api/bookings/all");
       if (!response.ok) throw new Error("Failed to fetch bookings");
   
       const data = await response.json();
