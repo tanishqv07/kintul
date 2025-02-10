@@ -40,13 +40,13 @@ const Login = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center">
       {/* Background Image */}
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/login-bg.jpg')" }}>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/assets/loginBackground.png')" }}>
+        <div className="absolute inset-0 bg-black opacity-30"></div>
       </div>
 
       {/* Login Card */}
-      <div className="relative z-10 flex flex-col bg-white p-10 shadow-lg rounded-md w-96">
-        <h2 className="text-2xl font-bold text-center">Login</h2>
+      <div className="relative z-10 flex flex-col bg-gray-900 p-10 shadow-xl rounded-md w-96">
+        <h2 className="text-2xl font-bold text-center text-orange-500">Login</h2>
         <input
           type="text"
           placeholder="Phone Number"
