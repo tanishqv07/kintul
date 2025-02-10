@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AdminNavbar from "../components/AdminNavbar"; //  Import Admin Navbar
-import { FaCirclePlus, FaMinus} from "react-icons/fa6";
+import { FaCirclePlus, FaDownload, FaMinus} from "react-icons/fa6";
 import jsPDF from 'jspdf';
+import TimeDisplay from "../components/TimeDisplay";
 const Admin = () => {
   const [passkey, setPasskey] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,7 +43,7 @@ useEffect(()=>{
 
   const getGreetings = (greetings) =>{
     const hour = new Date().getHours();
-    if (hour >= 24 && hour < 12){
+    if (hour >= 0 && hour < 12){
         return "☀️ Good Morning, Chief!";
     }
     else if(hour >= 12 && hour < 18){
@@ -131,12 +132,18 @@ doc.save(`${provider.name}_details.pdf`);
 
   const handleUpdateBookingStatus = async (id, newStatus) => {
     try {
-      await fetch(`https://kintul-production.up.railway.app/api/bookings/${id}`, {
+      const response = await fetch(`https://kintul-production.up.railway.app/api/bookings/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: "done" }), 
       });
-      fetchBookings(); 
+
+      if (!response.ok) throw new Error("Failed to update booking");
+
+      
+      setBookings((prevBookings) => prevBookings.filter(b => b._id !== id));
+
+      console.log(`Booking ${id} marked as done`);
     } catch (error) {
       console.error("Error updating booking:", error);
     }
@@ -217,10 +224,11 @@ const fetchServices = async () => {
         <div className="pb-20">
             <h1 className="text-3xl font-bold text-center mt-5 py-5">{greetings}</h1>
           <div className="p-6">
+            <TimeDisplay/>
             {/* Registered Users Section */}
             {selectedTab === "users" && (
-              <div className="p-4 bg-white shadow-md rounded-lg">
-                <h3 className="text-xl font-semibold">Registered Providers</h3>
+              <div className="p-4 bg-white shadow-md rounded-lg mt-3">
+                <h3 className="text-2xl font-semibold">Registered Providers</h3>
                 <ul>
   {providers.map((provider) => (
     <li key={provider._id} className="border-b p-2 flex justify-between">
@@ -235,7 +243,7 @@ const fetchServices = async () => {
         {/*  Toggle Status Button */}
         <button
           onClick={() => handleToggleProviderStatus(provider._id, provider.status)}
-          className={`px-4 py-1 rounded-md ${
+          className={`px-4 py-1 rounded-md hover:bg-red-700 ${
             provider.status === "active" ? "bg-red-500 text-white" : "bg-green-500 text-white"
           }`}
         >
@@ -245,9 +253,9 @@ const fetchServices = async () => {
         {/*  Download PDF Button */}
         <button
           onClick={() => handleDownloadPDF(provider)}
-          className="px-4 py-1 bg-blue-500 text-white rounded-md"
+          className="px-4 py-1 bg-blue-500 text-white rounded-md hover:bg-black"
         >
-          Download PDF
+          <FaDownload/>
         </button>
       </div>
     </li>
@@ -259,37 +267,31 @@ const fetchServices = async () => {
             {/* Bookings Section */}
             {selectedTab === "bookings" && (
               <div className="p-4 bg-white shadow-md rounded-lg">
-                <h3 className="text-xl font-semibold">Bookings</h3>
-                <ul>
-                  {bookings.map((booking) => (
-                    <li key={booking._id} className="border-b p-2 flex justify-between">
-                      <div>
-                        <strong>{booking.serviceName}</strong> - {booking.customerName}  
-                        <br />
-                        <span>Status: {booking.status}</span>
-                      </div>
-                      <div>
-                        {booking.status === "pending" && (
-                          <>
-                            <button
-                              onClick={() => handleUpdateBookingStatus(booking._id, "done")}
-                              className="px-4 py-1 bg-green-500 text-white rounded-md mx-1"
-                            >
-                              Mark as Done
-                            </button>
-                            <button
-                              onClick={() => handleUpdateBookingStatus(booking._id, "cancelled")}
-                              className="px-4 py-1 bg-red-500 text-white rounded-md"
-                            >
-                              Cancel
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <h3 className="text-2xl font-semibold">Bookings</h3>
+      <ul>
+        {bookings.map((booking) => (
+          <li key={booking._id} className={`border-b p-2 flex justify-between 
+            ${booking.status === "cancelled" ? "text-red-600 font-bold" : ""}`}>
+
+            <div>
+              <strong>{booking.serviceName}</strong> - {booking.customerName}  
+              <br />
+              <span>Status: {booking.status}</span>
+            </div>
+
+            {booking.status === "pending" && (
+              <button
+                onClick={() => handleUpdateBookingStatus(booking._id)}
+                className="px-4 py-1 bg-green-500 text-white rounded-md mx-1"
+              >
+                Mark as Done
+              </button>
+            )}
+          </li>
+        ))}
+            </ul>
+          </div>
+              
             )}
 
             {/* New Service Section */}
