@@ -3,6 +3,7 @@ import AdminNavbar from "../components/AdminNavbar"; //  Import Admin Navbar
 import { FaCirclePlus, FaDownload, FaMinus} from "react-icons/fa6";
 import jsPDF from 'jspdf';
 import TimeDisplay from "../components/TimeDisplay";
+import { FaRegEye } from "react-icons/fa6";
 const Admin = () => {
   const [passkey, setPasskey] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -132,7 +133,7 @@ doc.save(`${provider.name}_details.pdf`);
 
   const handleUpdateBookingStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`https://kintul-production.up.railway.app/api/bookings/${id}/status`, {
+      const response = await fetch(`https://kintul-production.up.railway.app/api/bookings/admin/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "done" }), 
@@ -207,18 +208,21 @@ const fetchServices = async () => {
   return (
     <div className="min-h-screen bg-gray-100 pb-16">
       {!isAuthenticated ? (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="flex flex-col bg-gradient-to-b from-red-500 to-black text-red-500 items-center justify-center min-h-screen">
+            <FaRegEye className="mb-3 text-white hover:text-black" size={96}/>
+          <div className="flex flex-col bg-gray-900 p-10 shadow-md shadow-black rounded-md text-center">
           <h2 className="text-2xl font-bold">Admin Login</h2>
           <input
             type="password"
             placeholder="Enter Admin Passkey"
             value={passkey}
             onChange={(e) => setPasskey(e.target.value)}
-            className="border p-2 mt-2"
+            className="border p-2 mt-2 text-red-400"
           />
-          <button onClick={handleLogin} className="px-6 py-2 bg-blue-600 text-white mt-4">
+          <button onClick={handleLogin} className="px-6 py-2 bg-red-500 hover:bg-red-700 text-white mt-4">
             Login
           </button>
+          </div>
         </div>
       ) : (
         <div className="pb-20">

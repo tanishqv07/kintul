@@ -67,7 +67,7 @@ const Login = () => {
             className="absolute inset-y-0 right-3 flex items-center"
             onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? <FaEye /> : <FaEyeSlash />}
+            {showPassword ? <FaEye className="text-orange-500" /> : <FaEyeSlash />}
           </button>
         </div>
         <button onClick={handleLogin} className="px-6 py-2 bg-blue-600 text-white mt-4">

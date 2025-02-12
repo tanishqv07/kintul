@@ -13,7 +13,9 @@ router.get("/my", authMiddleware, getUserBookings);
 //for admin fetch
 router.get("/all", getAllBookings);
 
-//toggle route
-router.put("/:id/status", authMiddleware, roleMiddleware("Admin"), updateBookingStatus);
+//toggle route for cancelling
+router.put("/:id/status", authMiddleware, roleMiddleware("Customer"), updateBookingStatus);
 
+//for admin to update status
+router.put("/admin/:id/status", updateBookingStatus)
 module.exports = router;

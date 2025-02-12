@@ -36,24 +36,34 @@ const Bookings = () => {
   };
 
   const handleCancelBooking = async (id) => {
+    const token = localStorage.getItem("token");  // ✅ Get user token
+    if (!token) {
+      alert("You need to log in");
+      return;
+    }
+  
     try {
       const response = await fetch(`https://kintul-production.up.railway.app/api/bookings/${id}/status`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`  // ✅ Pass token
+        },
         body: JSON.stringify({ status: "cancelled" }),
       });
-
+  
       if (!response.ok) throw new Error("Failed to cancel booking");
-
+  
       setBookings((prev) =>
         prev.map((b) => (b._id === id ? { ...b, status: "cancelled" } : b))
       );
-
+  
       alert("Booking cancelled successfully!");
     } catch (error) {
       console.error("Error cancelling booking:", error);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-950 p-0 flex flex-col items-center">

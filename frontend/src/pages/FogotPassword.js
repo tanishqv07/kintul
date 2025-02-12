@@ -55,21 +55,21 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 shadow-md rounded-md w-96">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-tr from-orange-700 to-yellow-400">
+      <div className="bg-gray-900 border-4 border-white p-6 shadow-lg shadow-black rounded-md w-96 text-orange-500">
         <h2 className="text-2xl font-bold text-center mb-4">Forgot Password</h2>
 
         {step === 1 && (
           <>
-            <p className="text-gray-600 text-center">Enter your registered phone number.</p>
+            <p className="text-gray-600 text-center text-white">Enter your registered phone number.</p>
             <input
               type="text"
               placeholder="Phone Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="border p-2 mt-4 w-full"
+              className="border p-2 mt-4 w-full bg-gray-950 text-green-500 font-bold"
             />
-            <button onClick={handlePhoneSubmit} className="mt-4 px-6 py-2 bg-blue-600 text-white w-full">
+            <button onClick={handlePhoneSubmit} className="mt-4 px-6 py-2 bg-orange-500 hover:bg-black text-white w-full">
               Send OTP
             </button>
           </>

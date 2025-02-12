@@ -6,11 +6,11 @@ import Signup from "./pages/Signup";
 import Services from "./pages/Services";
 import Admin from "./pages/Admin";
 import Bookings from "./pages/Bookings";
-import ConfirmBooking from "./pages/ConfirmBooking";
+import ConfirmBooking from "./pages/confirmBooking.js";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import ProviderDashboard from "./pages/ProviderDashboard.js";
-
+import ForgotPassword from "./pages/FogotPassword.js";
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<Search />} />
         <Route path="/providerDashboard" element={<ProviderDashboard/>} />
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
       </Routes>
     </Router>
   );

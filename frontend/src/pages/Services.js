@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import TitleBar from "../components/TitleBar";
-import { FaCirclePlus } from "react-icons/fa6";
+import { FaCirclePlus, FaMessage } from "react-icons/fa6";
 import ModalCard from "../components/ModalCard";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -102,21 +102,34 @@ const Services = () => {
       {/* Mobile Carousels */}
       <div className="md:hidden px-4">
         {/* Recent Bookings */}
-        {recentBookings.length > 0 && (
-          <>
-            <h3 className="text-xl font-semibold mt-6 mb-3">Recent Bookings</h3>
-            <Slider {...carouselSettings}>
-              {recentBookings.map((booking) => (
-                <div key={booking.serviceId} className="p-2">
-                  <div className="bg-gray-900 shadow-md rounded-lg overflow-hidden">
-                    <img src={booking.imageUrl} alt={booking.serviceName} className="w-full h-40 object-cover" />
-                    <h4 className="text-center font-semibold py-2">{booking.serviceName}</h4>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </>
-        )}
+        {/* Recent Bookings */}
+{recentBookings.length > 0 && (
+  <>
+    <h3 className="text-xl font-semibold mt-6 mb-3">Recent Bookings</h3>
+    <Slider {...carouselSettings}>
+      {recentBookings.map((booking) => {
+        const service = services.find((s) => s._id === booking.serviceId);
+        return service ? (
+          <div key={booking.serviceId} className="p-2 relative">
+            <div className="bg-gray-900 shadow-md rounded-full overflow-hidden">
+              <img src={service.imageUrl} alt={service.title} className="w-full h-40 object-cover" />
+              <div className=" flex flex-col items-center">
+              <h4 className="text-center font-semibold ">{service.title}</h4>
+              <button
+                className=" bottom-2 right-2 bg-transparent text-orange-500 p-1 rounded-full hover:opacity-70 transition"
+                onClick={() => setSelectedService(service)}
+              >
+                <FaCirclePlus size={24} />
+              </button>
+              </div>
+            </div>
+          </div>
+        ) : null;
+      })}
+    </Slider>
+  </>
+)}
+
 
         {/* New Services */}
         <h3 className="text-xl font-semibold mt-6 mb-3">New Services</h3>
@@ -125,18 +138,23 @@ const Services = () => {
             <div key={service._id} className="p-2">
               <div className="relative bg-gray-900 shadow-md rounded-lg overflow-hidden">
                 <img src={service.imageUrl} alt={service.title} className="w-full h-40 object-cover" />
+                <div className="flex justify-around">
+                <h4 className="text-center font-semibold ">{service.title}</h4>
                 <button
-                  className="absolute bottom-2 right-2 bg-transparent text-orange-500 p-2 rounded-full hover:bg-orange-600 transition"
+                  className=" bg-transparent text-orange-500 p-2 rounded-full hover:bg-gray-500 transition"
                   onClick={() => setSelectedService(service)}
                 >
                   <FaCirclePlus size={24} />
                 </button>
+                </div>
               </div>
             </div>
           ))}
         </Slider>
       </div>
-
+      <div className="flex justify-center py-8 bg-black">
+        <p>for support contact us at <FaMessage/> kintul@gmail.com</p>
+      </div>
       {/* Modal (Shows when a service is selected) */}
       {selectedService && <ModalCard service={selectedService} onClose={() => setSelectedService(null)} />}
     </div>
