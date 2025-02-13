@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import TitleBar from "../components/TitleBar";
-import { FaCirclePlus, FaMessage } from "react-icons/fa6";
+import { FaCirclePlus, FaComputer } from "react-icons/fa6";
 import ModalCard from "../components/ModalCard";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -89,12 +89,15 @@ const Services = () => {
         {services.map((service) => (
           <div key={service._id} className="relative bg-gray-900 shadow-md rounded-lg overflow-hidden">
             <img src={service.imageUrl} alt={service.title} className="w-full h-40 object-cover" />
+            <div className="flex flex-cols justify-between bg-gray-800 py-2">
+              <p className="px-3 font-bold">{service.title}</p>
             <button
               className="absolute bottom-2 right-2 bg-orange-500 text-gray-900 p-2 rounded-full shadow-md hover:bg-orange-600 transition"
               onClick={() => setSelectedService(service)}
             >
               <FaCirclePlus size={24} />
             </button>
+            </div>
           </div>
         ))}
       </div>
@@ -152,8 +155,9 @@ const Services = () => {
           ))}
         </Slider>
       </div>
-      <div className="flex justify-center py-8 bg-black">
-        <p>for support contact us at <FaMessage/> kintul@gmail.com</p>
+      <div className="flex  flex-col items-center py-8 bg-black">
+      <FaComputer/>
+        <p>for support contact us at  kintul@gmail.com</p>
       </div>
       {/* Modal (Shows when a service is selected) */}
       {selectedService && <ModalCard service={selectedService} onClose={() => setSelectedService(null)} />}

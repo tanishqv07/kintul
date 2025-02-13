@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import TitleBar from "../components/TitleBar";
 import { FaRegClock } from "react-icons/fa6";
+import LogoutButton from "../components/LogoutButton";
+import Heading from "../components/Heading";
+
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [newAddress, setNewAddress] = useState("");
@@ -46,7 +49,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-950 text-orange-400 flex flex-col items-center p-6">
        <TitleBar/>
-      <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom} text-white`}>My Profile</h2>
+      <Heading text="Profile" />
 
       {user ? (
         <div className="bg-gray-900 p-6 shadow-xl shadow-orange-500 rounded-lg flex flex-col md:flex-row items-center md:items-start max-w-4xl w-full">
@@ -73,10 +76,11 @@ const Profile = () => {
             />
             <button
               onClick={handleUpdateAddress}
-              className="mt-4 px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition"
+              className="mt-4 px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition mb-5"
             >
               Update Address
             </button>
+            <LogoutButton/>
           </div>
         </div>
       ) : (

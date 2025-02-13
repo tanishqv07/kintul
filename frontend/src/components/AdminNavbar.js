@@ -1,5 +1,6 @@
 import React from "react";
 import { FaUsers, FaClipboardList, FaPlus } from "react-icons/fa6";
+import LogoutButton from "./LogoutButton";
 
 const AdminNavbar = ({ selectedTab, setSelectedTab }) => {
   return (
@@ -31,6 +32,7 @@ const AdminNavbar = ({ selectedTab, setSelectedTab }) => {
         <FaPlus size={20} />
         <span className="text-sm">New Service</span>
       </button>
+      <LogoutButton/>
     </nav>
   );
 };

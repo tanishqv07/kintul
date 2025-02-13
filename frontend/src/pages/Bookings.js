@@ -47,7 +47,7 @@ const Bookings = () => {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`  // ✅ Pass token
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ status: "cancelled" }),
       });
@@ -69,6 +69,7 @@ const Bookings = () => {
     <div className="min-h-screen bg-gray-950 p-0 flex flex-col items-center">
       <Navbar setIsNavbarBottom={setIsNavbarBottom} />
       <TitleBar />
+      
       <h2 className={`text-3xl font-bold text-center mb-6 ${isNavbarBottom ? "mt-0" : "mt-20"}`}>My Bookings</h2>
 
       {bookings.length === 0 ? (
@@ -96,7 +97,7 @@ const Bookings = () => {
                   onClick={() => handleCancelBooking(booking._id)}
                   className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md"
                 >
-                  Cancel Booking
+                  cancel
                 </button>
               )}
             </li>

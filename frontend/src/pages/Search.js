@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { FaTimes } from "react-icons/fa"; // ❌ Import the 'X' icon
 import TitleBar from "../components/TitleBar";
+import ModalCard from "../components/ModalCard"; // ✅ Import Modal Component
 
 const Search = () => {
   const [query, setQuery] = useState("");
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
+  const [selectedService, setSelectedService] = useState(null); // ✅ State for Modal
   const [isNavbarBottom, setIsNavbarBottom] = useState(false);
 
   useEffect(() => {
@@ -39,7 +41,8 @@ const Search = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 px-3 flex flex-col items-center">
-      <TitleBar/>
+      <TitleBar />
+      
       {/* Page Heading */}
       <h2 className={`text-3xl font-bold text-center text-white mb-6 ${isNavbarBottom ? "mt-0 py-5" : "mt-20 py-5"}`}>
         Search Services
@@ -62,16 +65,22 @@ const Search = () => {
         </div>
       ) : (
         //  Responsive Grid Layout for Services
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-6 w-full max-w-6xl px-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-6 w-full max-w-6xl px-1">
           {filteredServices.map((service) => (
-            <div key={service._id} className="bg-white shadow-md p-4 rounded-lg">
+            <div 
+              key={service._id} 
+              className="bg-gray-900 text-white shadow-md p-4 rounded-lg cursor-pointer hover:bg-gray-800 transition"
+              onClick={() => setSelectedService(service)} // ✅ Open Modal on Click
+            >
               <img src={service.imageUrl} alt={service.title} className="w-full h-40 object-cover rounded-md" />
               <h3 className="text-lg font-semibold mt-2">{service.title}</h3>
-              <p className="text-gray-600">{service.description}</p>
             </div>
           ))}
         </div>
       )}
+
+      {/* Modal - Shows when a service is clicked */}
+      {selectedService && <ModalCard service={selectedService} onClose={() => setSelectedService(null)} />}
 
       {/* Navbar */}
       <Navbar setIsNavbarBottom={setIsNavbarBottom} />

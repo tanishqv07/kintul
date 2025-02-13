@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaPhone, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
 import TitleBar from "../components/TitleBar";
 import TimeDisplay from "../components/TimeDisplay";
-
+import LogoutButton from "../components/LogoutButton";
 const ProviderDashboard = () => {
   const [user, setUser] = useState(null);
   const [newAddress, setNewAddress] = useState("");
@@ -23,7 +23,7 @@ const ProviderDashboard = () => {
         if (!response.ok) throw new Error("Failed to fetch user data");
 
         const data = await response.json();
-        console.log("Provider Data:", data);
+        //console.log("Provider Data:", data);
         setUser(data);
         setNewAddress(data.address || "");
       } catch (error) {
@@ -101,13 +101,14 @@ const ProviderDashboard = () => {
             {/* Ask Payment Button */}
             <div className="mt-6">
               <button
-                className="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-700"
+                className="px-6 py-2 mb-3 bg-orange-500 text-white rounded-md hover:bg-orange-700"
                 onClick={() => window.open("https://external-payment.com", "_blank")}
               >
                 Ask Payment
               </button>
             </div>
           </div>
+          <LogoutButton/>
         </div>
       ) : (
         <h3 className="text-lg text-center mt-6">Loading details...</h3>

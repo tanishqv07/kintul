@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import AdminNavbar from "../components/AdminNavbar"; //  Import Admin Navbar
-import { FaCirclePlus, FaDownload, FaMinus} from "react-icons/fa6";
+import { FaCirclePlus, FaDownload, FaMinus,FaRegEye, FaCheck} from "react-icons/fa6";
 import jsPDF from 'jspdf';
 import TimeDisplay from "../components/TimeDisplay";
-import { FaRegEye } from "react-icons/fa6";
+import GrossData from "../components/GrossData";
+
 const Admin = () => {
   const [passkey, setPasskey] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -12,6 +13,7 @@ const Admin = () => {
   const [bookings, setBookings] = useState([]);
   const [greetings, setGreetings] = useState("");
   const [services, setServices] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [newService, setNewService] = useState({
     title:"",
     description:"",
@@ -54,7 +56,19 @@ useEffect(()=>{
         return "🌙 working late.. 💤💤💤";
     }
   }
+//format date
+const formatDate = (isoDate) => {
+  const date = new Date(isoDate);
 
+  return date.toLocaleString("en-US", {
+    year: "2-digit",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,  // Ensures AM/PM format
+  });
+};
   const fetchProviders = async () => {
     try {
       const res = await fetch("https://kintul-production.up.railway.app/api/user/providers")
@@ -124,7 +138,7 @@ doc.save(`${provider.name}_details.pdf`);
       if (!response.ok) throw new Error("Failed to fetch bookings");
   
       const data = await response.json();
-      console.log("Fetched Bookings:", data); 
+      //console.log("Fetched Bookings:", data); 
       setBookings(data);
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -136,19 +150,36 @@ doc.save(`${provider.name}_details.pdf`);
       const response = await fetch(`https://kintul-production.up.railway.app/api/bookings/admin/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "done" }), 
+        body: JSON.stringify({ status: newStatus }), 
       });
 
       if (!response.ok) throw new Error("Failed to update booking");
 
       
-      setBookings((prevBookings) => prevBookings.filter(b => b._id !== id));
+      setBookings((prevBookings) => prevBookings.map((b)=>(b._id === id ?{...b,status:newStatus}:b))
+    );
 
-      console.log(`Booking ${id} marked as done`);
+     // console.log(`Booking ${id} marked as {newStatus}`);
     } catch (error) {
       console.error("Error updating booking:", error);
     }
   };
+
+//Fiter bookings
+const filteredBookings = bookings.filter((booking) => {
+  const searchLower = searchQuery.toLowerCase();
+
+  // Ensure values are defined before calling `.toLowerCase()`
+  const customerName = booking.customerName ? booking.customerName.toLowerCase() : "";
+  const serviceName = booking.serviceName ? booking.serviceName.toLowerCase() : "";
+  const bookingMonth = new Date(booking.dateTime).toLocaleString("default", { month: "long" }).toLowerCase();
+
+  return (
+    customerName.includes(searchLower) ||
+    serviceName.includes(searchLower) ||
+    bookingMonth.includes(searchLower)
+  );
+});
 // fetch a list of existing services
 const fetchServices = async () => {
   try {
@@ -229,6 +260,7 @@ const fetchServices = async () => {
             <h1 className="text-3xl font-bold text-center mt-5 py-5">{greetings}</h1>
           <div className="p-6">
             <TimeDisplay/>
+            <GrossData bookings={bookings || []}/>
             {/* Registered Users Section */}
             {selectedTab === "users" && (
               <div className="p-4 bg-white shadow-md rounded-lg mt-3">
@@ -270,33 +302,45 @@ const fetchServices = async () => {
 
             {/* Bookings Section */}
             {selectedTab === "bookings" && (
-              <div className="p-4 bg-white shadow-md rounded-lg">
-                <h3 className="text-2xl font-semibold">Bookings</h3>
-      <ul>
-        {bookings.map((booking) => (
-          <li key={booking._id} className={`border-b p-2 flex justify-between 
-            ${booking.status === "cancelled" ? "text-red-600 font-bold" : ""}`}>
-
-            <div>
-              <strong>{booking.serviceName}</strong> - {booking.customerName}  
-              <br />
-              <span>Status: {booking.status}</span>
-            </div>
-
-            {booking.status === "pending" && (
-              <button
-                onClick={() => handleUpdateBookingStatus(booking._id)}
-                className="px-4 py-1 bg-green-500 text-white rounded-md mx-1"
-              >
-                Mark as Done
-              </button>
-            )}
-          </li>
-        ))}
-            </ul>
-          </div>
+            <div className="p-4 bg-white shadow-md rounded-lg">
+              <h3 className="text-2xl font-semibold">Bookings</h3>
               
-            )}
+              {/* Search Bar */}
+              <input
+                type="text"
+                placeholder="Search by Name, Service, or Month..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="border-2 rounded-lg p-2 w-full mt-4 bg-transparent border-orange-500 text-orange-700"
+              />
+
+              <ul className="mt-4">
+                {filteredBookings.map((booking) => (
+                  <li key={booking._id} className={`border-b p-2 flex justify-between 
+                    ${booking.status === "cancelled" ? "text-red-600 font-bold" : ""}`}>
+
+                    <div>
+                      <strong>{booking.serviceName}</strong> - {booking.customerName} - {formatDate(booking.dateTime)}
+                      <br />
+                      <span>Status: {booking.status}</span>
+                    </div>
+
+                    {booking.status === "pending" && (
+                      <button
+                        onClick={() => handleUpdateBookingStatus(booking._id,"done")}
+                        className="p-4 bg-green-500 text-white rounded-full hover:bg-gray-800 mx-1"
+                      >
+                        <FaCheck/>
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        
+      
+
 
             {/* New Service Section */}
             {selectedTab === "services" && (
@@ -324,6 +368,7 @@ const fetchServices = async () => {
                 <button onClick={handleAddService} className="px-6 py-2 bg-green-600 text-white mt-2 rounded-full">
                   <FaCirclePlus/>
                 </button>
+            
                 {/**List of services available on plateform */}
                 <h3>Existing services</h3>
                 <ul className="mt-2">
