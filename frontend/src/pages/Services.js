@@ -80,7 +80,7 @@ const Services = () => {
       <TitleBar className="fixed top-0 left-0 w-full z-50" />
       
       {/* Heading component */}
-      <h2 className={`text-3xl font-bold text-center mb-6 py-3 text-orange-500 ${isNavbarBottom ? "mt-0 py-5" : "mt-20 py-5"}`}>
+      <h2 className={`text-3xl font-bold text-center mb-6 py-3 text-white ${isNavbarBottom ? "mt-0 py-5" : "mt-20 py-5"}`}>
         Available Services
       </h2>
 

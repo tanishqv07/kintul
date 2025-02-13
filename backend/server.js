@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("./config/db");
 const { seedServices } = require("./controllers/serviceController"); 
 
+
 const app = express();
 app.enable("trust proxy");
 app.use(express.json());
@@ -23,11 +24,13 @@ const authRoutes = require("./routes/authRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
 const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/admin",adminRoutes)
 
 
 // Root Route

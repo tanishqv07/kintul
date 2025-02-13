@@ -31,7 +31,7 @@ const ModalCard = ({ service, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-40">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-40">
       <div className="bg-gray-900 rounded-lg shadow-lg p-6 w-11/12 max-w-md relative">
         {/* Close Button */}
         <button className="absolute top-2 right-2 text-red-600 hover:text-orange-500 mb-5" onClick={onClose}>

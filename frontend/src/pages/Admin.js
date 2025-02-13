@@ -36,11 +36,23 @@ useEffect(()=>{
     }
   }, [isAuthenticated]);
 
-  const handleLogin = () => {
-    if (passkey === "123456") {
-      setIsAuthenticated(true);
-    } else {
-      alert("Incorrect passkey!");
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("https://kintul-production.up.railway.app/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ passkey }),
+      });
+  
+      const data = await response.json();
+      if (data.success) {
+        setIsAuthenticated(true);
+      } else {
+        alert("Incorrect passkey!");
+      }
+    } catch (error) {
+      console.error("Admin login error:", error);
+      alert("Server error. Try again.");
     }
   };
 
