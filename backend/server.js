@@ -10,7 +10,7 @@ app.enable("trust proxy");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: ["http://localhost:3000", "https://your-deployed-frontend.com"],
+  origin: ["http://localhost:3000", "https://golden-sorbet-d31a80.netlify.app"],
   credentials: true,
 })); 
 
